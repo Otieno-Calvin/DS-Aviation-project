@@ -18,30 +18,35 @@ jupyter:
   nbformat_minor: 5
 ---
 
-::: {#292b61a0 .cell .markdown}
+<div class="cell markdown">
+
 # Project Overview
 
 In this project, we aim to analyze aviation data assisting a company
 looking to diversify into the aircraft industry. Our goal is to identify
 the lowest-risk aircraft for commercial and private operations. By
 leveraging data cleaning, imputation, analysis, and visualization
-techniques, we will provide insights to guide the company\'s
+techniques, we will provide insights to guide the company's
 decision-making process.
 
 ## Business Problem
 
 The company is venturing into the aviation sector and needs guidance on
 selecting aircraft with minimal risk. As the analyst, your task is to
-analyze the data to recommend the safest aircraft for the company\'s new
+analyze the data to recommend the safest aircraft for the company's new
 business venture. Your findings will be crucial in helping the head of
 the aviation division make informed decisions on aircraft purchases.
-:::
 
-::: {#8c2b62f3-8467-4a02-afce-af224a6633f1 .cell .markdown}
+</div>
+
+<div class="cell markdown">
+
 ## Importing Libraries
-:::
 
-::: {#63be342e-9270-43ca-9d96-996b7f5257b6 .cell .code execution_count="2"}
+</div>
+
+<div class="cell code" execution_count="2">
+
 ``` python
 import string
 import pandas as pd
@@ -53,20 +58,25 @@ import seaborn as sns
 pd.set_option('display.max_rows', 100)  # Max rows to display
 pd.set_option('display.max_columns', 40)  # Max columns to display
 ```
-:::
 
-::: {#22a43c54-994b-4066-92c9-723401eb19ae .cell .code execution_count="3"}
+</div>
+
+<div class="cell code" execution_count="3">
+
 ``` python
 df = pd.read_csv(r'Data/AviationData.csv',encoding='windows-1252',low_memory=False)
 ```
-:::
 
-::: {#e50977ea-607e-4ce9-aa9d-7529f7ce7087 .cell .code execution_count="4"}
+</div>
+
+<div class="cell code" execution_count="4">
+
 ``` python
 df.isna().sum()
 ```
 
-::: {.output .execute_result execution_count="4"}
+<div class="output execute_result" execution_count="4">
+
     Event.Id                      0
     Investigation.Type            0
     Accident.Number               0
@@ -99,19 +109,25 @@ df.isna().sum()
     Report.Status              6384
     Publication.Date          13771
     dtype: int64
-:::
-:::
 
-::: {#79bdee24-a2da-46a2-9dcd-4532de0048b8 .cell .markdown}
+</div>
+
+</div>
+
+<div class="cell markdown">
+
 ## getting column data type
-:::
 
-::: {#072124d4-e39e-4241-8522-600c1256b905 .cell .code execution_count="5"}
+</div>
+
+<div class="cell code" execution_count="5">
+
 ``` python
 df.info()
 ```
 
-::: {.output .stream .stdout}
+<div class="output stream stdout">
+
     <class 'pandas.core.frame.DataFrame'>
     RangeIndex: 88889 entries, 0 to 88888
     Data columns (total 31 columns):
@@ -150,20 +166,26 @@ df.info()
      30  Publication.Date        75118 non-null  object 
     dtypes: float64(5), object(26)
     memory usage: 21.0+ MB
-:::
-:::
 
-::: {#932404f4-2bd2-4815-9d74-f1aa3f087957 .cell .markdown}
+</div>
+
+</div>
+
+<div class="cell markdown">
+
 ## Calculating the percentage of missing data
-:::
 
-::: {#b259c7aa-b285-457f-8485-3c1660004b71 .cell .code execution_count="6"}
+</div>
+
+<div class="cell code" execution_count="6">
+
 ``` python
 percentage_missing = (df.isna().sum()/len(df)*100).round(2)
 percentage_missing
 ```
 
-::: {.output .execute_result execution_count="6"}
+<div class="output execute_result" execution_count="6">
+
     Event.Id                   0.00
     Investigation.Type         0.00
     Accident.Number            0.00
@@ -196,250 +218,87 @@ percentage_missing
     Report.Status              7.18
     Publication.Date          15.49
     dtype: float64
-:::
-:::
 
-::: {#18989faa-e1ee-4a04-a391-009c29a919fa .cell .code execution_count="7"}
+</div>
+
+</div>
+
+<div class="cell code" execution_count="7">
+
 ``` python
 df.head()
 ```
 
-::: {.output .execute_result execution_count="7"}
-```{=html}
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="output execute_result" execution_count="7">
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+             Event.Id Investigation.Type Accident.Number  Event.Date  \
+    0  20001218X45444           Accident      SEA87LA080  1948-10-24   
+    1  20001218X45447           Accident      LAX94LA336  1962-07-19   
+    2  20061025X01555           Accident      NYC07LA005  1974-08-30   
+    3  20001218X45448           Accident      LAX96LA321  1977-06-19   
+    4  20041105X01764           Accident      CHI79FA064  1979-08-02   
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Event.Id</th>
-      <th>Investigation.Type</th>
-      <th>Accident.Number</th>
-      <th>Event.Date</th>
-      <th>Location</th>
-      <th>Country</th>
-      <th>Latitude</th>
-      <th>Longitude</th>
-      <th>Airport.Code</th>
-      <th>Airport.Name</th>
-      <th>Injury.Severity</th>
-      <th>Aircraft.damage</th>
-      <th>Aircraft.Category</th>
-      <th>Registration.Number</th>
-      <th>Make</th>
-      <th>Model</th>
-      <th>Amateur.Built</th>
-      <th>Number.of.Engines</th>
-      <th>Engine.Type</th>
-      <th>FAR.Description</th>
-      <th>Schedule</th>
-      <th>Purpose.of.flight</th>
-      <th>Air.carrier</th>
-      <th>Total.Fatal.Injuries</th>
-      <th>Total.Serious.Injuries</th>
-      <th>Total.Minor.Injuries</th>
-      <th>Total.Uninjured</th>
-      <th>Weather.Condition</th>
-      <th>Broad.phase.of.flight</th>
-      <th>Report.Status</th>
-      <th>Publication.Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>20001218X45444</td>
-      <td>Accident</td>
-      <td>SEA87LA080</td>
-      <td>1948-10-24</td>
-      <td>MOOSE CREEK, ID</td>
-      <td>United States</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>Fatal(2)</td>
-      <td>Destroyed</td>
-      <td>NaN</td>
-      <td>NC6404</td>
-      <td>Stinson</td>
-      <td>108-3</td>
-      <td>No</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>Personal</td>
-      <td>NaN</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>UNK</td>
-      <td>Cruise</td>
-      <td>Probable Cause</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>20001218X45447</td>
-      <td>Accident</td>
-      <td>LAX94LA336</td>
-      <td>1962-07-19</td>
-      <td>BRIDGEPORT, CA</td>
-      <td>United States</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>Fatal(4)</td>
-      <td>Destroyed</td>
-      <td>NaN</td>
-      <td>N5069P</td>
-      <td>Piper</td>
-      <td>PA24-180</td>
-      <td>No</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>Personal</td>
-      <td>NaN</td>
-      <td>4.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>UNK</td>
-      <td>Unknown</td>
-      <td>Probable Cause</td>
-      <td>19-09-1996</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>20061025X01555</td>
-      <td>Accident</td>
-      <td>NYC07LA005</td>
-      <td>1974-08-30</td>
-      <td>Saltville, VA</td>
-      <td>United States</td>
-      <td>36.922223</td>
-      <td>-81.878056</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>Fatal(3)</td>
-      <td>Destroyed</td>
-      <td>NaN</td>
-      <td>N5142R</td>
-      <td>Cessna</td>
-      <td>172M</td>
-      <td>No</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>Personal</td>
-      <td>NaN</td>
-      <td>3.0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>IMC</td>
-      <td>Cruise</td>
-      <td>Probable Cause</td>
-      <td>26-02-2007</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>20001218X45448</td>
-      <td>Accident</td>
-      <td>LAX96LA321</td>
-      <td>1977-06-19</td>
-      <td>EUREKA, CA</td>
-      <td>United States</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>Fatal(2)</td>
-      <td>Destroyed</td>
-      <td>NaN</td>
-      <td>N1168J</td>
-      <td>Rockwell</td>
-      <td>112</td>
-      <td>No</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>Personal</td>
-      <td>NaN</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>IMC</td>
-      <td>Cruise</td>
-      <td>Probable Cause</td>
-      <td>12-09-2000</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>20041105X01764</td>
-      <td>Accident</td>
-      <td>CHI79FA064</td>
-      <td>1979-08-02</td>
-      <td>Canton, OH</td>
-      <td>United States</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>Fatal(1)</td>
-      <td>Destroyed</td>
-      <td>NaN</td>
-      <td>N15NY</td>
-      <td>Cessna</td>
-      <td>501</td>
-      <td>No</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>Personal</td>
-      <td>NaN</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>NaN</td>
-      <td>0.0</td>
-      <td>VMC</td>
-      <td>Approach</td>
-      <td>Probable Cause</td>
-      <td>16-04-1980</td>
-    </tr>
-  </tbody>
-</table>
+              Location        Country   Latitude   Longitude Airport.Code  \
+    0  MOOSE CREEK, ID  United States        NaN         NaN          NaN   
+    1   BRIDGEPORT, CA  United States        NaN         NaN          NaN   
+    2    Saltville, VA  United States  36.922223  -81.878056          NaN   
+    3       EUREKA, CA  United States        NaN         NaN          NaN   
+    4       Canton, OH  United States        NaN         NaN          NaN   
+
+      Airport.Name Injury.Severity Aircraft.damage Aircraft.Category  \
+    0          NaN        Fatal(2)       Destroyed               NaN   
+    1          NaN        Fatal(4)       Destroyed               NaN   
+    2          NaN        Fatal(3)       Destroyed               NaN   
+    3          NaN        Fatal(2)       Destroyed               NaN   
+    4          NaN        Fatal(1)       Destroyed               NaN   
+
+      Registration.Number      Make     Model Amateur.Built  Number.of.Engines  \
+    0              NC6404   Stinson     108-3            No                1.0   
+    1              N5069P     Piper  PA24-180            No                1.0   
+    2              N5142R    Cessna      172M            No                1.0   
+    3              N1168J  Rockwell       112            No                1.0   
+    4               N15NY    Cessna       501            No                NaN   
+
+         Engine.Type FAR.Description Schedule Purpose.of.flight Air.carrier  \
+    0  Reciprocating             NaN      NaN          Personal         NaN   
+    1  Reciprocating             NaN      NaN          Personal         NaN   
+    2  Reciprocating             NaN      NaN          Personal         NaN   
+    3  Reciprocating             NaN      NaN          Personal         NaN   
+    4            NaN             NaN      NaN          Personal         NaN   
+
+       Total.Fatal.Injuries  Total.Serious.Injuries  Total.Minor.Injuries  \
+    0                   2.0                     0.0                   0.0   
+    1                   4.0                     0.0                   0.0   
+    2                   3.0                     NaN                   NaN   
+    3                   2.0                     0.0                   0.0   
+    4                   1.0                     2.0                   NaN   
+
+       Total.Uninjured Weather.Condition Broad.phase.of.flight   Report.Status  \
+    0              0.0               UNK                Cruise  Probable Cause   
+    1              0.0               UNK               Unknown  Probable Cause   
+    2              NaN               IMC                Cruise  Probable Cause   
+    3              0.0               IMC                Cruise  Probable Cause   
+    4              0.0               VMC              Approach  Probable Cause   
+
+      Publication.Date  
+    0              NaN  
+    1       19-09-1996  
+    2       26-02-2007  
+    3       12-09-2000  
+    4       16-04-1980  
+
 </div>
-```
-:::
-:::
 
-::: {#26c55828-ae21-499c-9a15-456e0c5e91fa .cell .markdown}
-## retreiving only relevant column to the Project . {#retreiving-only-relevant-column-to-the-project-}
-:::
+</div>
 
-::: {#f1485ba4-7a75-4ef1-9a07-e03ced7c5edc .cell .code execution_count="8"}
+<div class="cell markdown">
+
+## retreiving only relevant column to the Project .
+
+</div>
+
+<div class="cell code" execution_count="8">
+
 ``` python
 relevant_columns=[
     'Event.Date', 'Location', 'Country',
@@ -449,165 +308,65 @@ relevant_columns=[
     'Broad.phase.of.flight'
 ]
 ```
-:::
 
-::: {#ad383b96-780c-4dfc-aba0-ab6684f464ee .cell .code execution_count="9"}
+</div>
+
+<div class="cell code" execution_count="9">
+
 ``` python
 df = df[relevant_columns]
 ```
-:::
 
-::: {#b5f45c7d-b2e1-4209-9b1d-4f9e1b9a07a3 .cell .code execution_count="10"}
+</div>
+
+<div class="cell code" execution_count="10">
+
 ``` python
 df.head()
 ```
 
-::: {.output .execute_result execution_count="10"}
-```{=html}
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="output execute_result" execution_count="10">
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+       Event.Date         Location        Country Injury.Severity Aircraft.damage  \
+    0  1948-10-24  MOOSE CREEK, ID  United States        Fatal(2)       Destroyed   
+    1  1962-07-19   BRIDGEPORT, CA  United States        Fatal(4)       Destroyed   
+    2  1974-08-30    Saltville, VA  United States        Fatal(3)       Destroyed   
+    3  1977-06-19       EUREKA, CA  United States        Fatal(2)       Destroyed   
+    4  1979-08-02       Canton, OH  United States        Fatal(1)       Destroyed   
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Event.Date</th>
-      <th>Location</th>
-      <th>Country</th>
-      <th>Injury.Severity</th>
-      <th>Aircraft.damage</th>
-      <th>Aircraft.Category</th>
-      <th>Make</th>
-      <th>Model</th>
-      <th>Total.Fatal.Injuries</th>
-      <th>Total.Serious.Injuries</th>
-      <th>Total.Minor.Injuries</th>
-      <th>Number.of.Engines</th>
-      <th>Engine.Type</th>
-      <th>Total.Uninjured</th>
-      <th>Weather.Condition</th>
-      <th>Broad.phase.of.flight</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1948-10-24</td>
-      <td>MOOSE CREEK, ID</td>
-      <td>United States</td>
-      <td>Fatal(2)</td>
-      <td>Destroyed</td>
-      <td>NaN</td>
-      <td>Stinson</td>
-      <td>108-3</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>UNK</td>
-      <td>Cruise</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1962-07-19</td>
-      <td>BRIDGEPORT, CA</td>
-      <td>United States</td>
-      <td>Fatal(4)</td>
-      <td>Destroyed</td>
-      <td>NaN</td>
-      <td>Piper</td>
-      <td>PA24-180</td>
-      <td>4.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>UNK</td>
-      <td>Unknown</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>1974-08-30</td>
-      <td>Saltville, VA</td>
-      <td>United States</td>
-      <td>Fatal(3)</td>
-      <td>Destroyed</td>
-      <td>NaN</td>
-      <td>Cessna</td>
-      <td>172M</td>
-      <td>3.0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>NaN</td>
-      <td>IMC</td>
-      <td>Cruise</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>1977-06-19</td>
-      <td>EUREKA, CA</td>
-      <td>United States</td>
-      <td>Fatal(2)</td>
-      <td>Destroyed</td>
-      <td>NaN</td>
-      <td>Rockwell</td>
-      <td>112</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>IMC</td>
-      <td>Cruise</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>1979-08-02</td>
-      <td>Canton, OH</td>
-      <td>United States</td>
-      <td>Fatal(1)</td>
-      <td>Destroyed</td>
-      <td>NaN</td>
-      <td>Cessna</td>
-      <td>501</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.0</td>
-      <td>VMC</td>
-      <td>Approach</td>
-    </tr>
-  </tbody>
-</table>
+      Aircraft.Category      Make     Model  Total.Fatal.Injuries  \
+    0               NaN   Stinson     108-3                   2.0   
+    1               NaN     Piper  PA24-180                   4.0   
+    2               NaN    Cessna      172M                   3.0   
+    3               NaN  Rockwell       112                   2.0   
+    4               NaN    Cessna       501                   1.0   
+
+       Total.Serious.Injuries  Total.Minor.Injuries  Number.of.Engines  \
+    0                     0.0                   0.0                1.0   
+    1                     0.0                   0.0                1.0   
+    2                     NaN                   NaN                1.0   
+    3                     0.0                   0.0                1.0   
+    4                     2.0                   NaN                NaN   
+
+         Engine.Type  Total.Uninjured Weather.Condition Broad.phase.of.flight  
+    0  Reciprocating              0.0               UNK                Cruise  
+    1  Reciprocating              0.0               UNK               Unknown  
+    2  Reciprocating              NaN               IMC                Cruise  
+    3  Reciprocating              0.0               IMC                Cruise  
+    4            NaN              0.0               VMC              Approach  
+
 </div>
-```
-:::
-:::
 
-::: {#989afeaf-bea8-4c4a-bd2f-5504276f6a8e .cell .markdown}
+</div>
+
+<div class="cell markdown">
+
 ### rechecking missing value percentage in relevant columns
-:::
 
-::: {#03348c85-06dc-4ae7-86b8-eacfff4f9b07 .cell .code execution_count="11"}
+</div>
+
+<div class="cell code" execution_count="11">
+
 ``` python
 def percentage_missing (df):
     percentages=[]
@@ -616,7 +375,8 @@ def percentage_missing (df):
 percentage_missing(df)
 ```
 
-::: {.output .execute_result execution_count="11"}
+<div class="output execute_result" execution_count="11">
+
     Event.Date                 0.00
     Location                   0.06
     Country                    0.25
@@ -634,40 +394,53 @@ percentage_missing(df)
     Weather.Condition          5.05
     Broad.phase.of.flight     30.56
     dtype: float64
-:::
-:::
 
-::: {#cbf53709 .cell .markdown}
+</div>
+
+</div>
+
+<div class="cell markdown">
+
 ## Normalizing data
-:::
 
-::: {#29f849b7 .cell .markdown}
-### Deleting data before 1982.As much of the data is missing. {#deleting-data-before-1982as-much-of-the-data-is-missing}
-:::
+</div>
 
-::: {#992d1bae .cell .code execution_count="12"}
+<div class="cell markdown">
+
+### Deleting data before 1982.As much of the data is missing.
+
+</div>
+
+<div class="cell code" execution_count="12">
+
 ``` python
-
 df = df.drop(index=list(df[df['Event.Date']<'1985'].index.values.tolist())).reset_index(drop=True)
 ```
-:::
 
-::: {#32dad725 .cell .markdown}
+</div>
+
+<div class="cell markdown">
+
 ### Dropping all null values for columns with missing value percentage less than 10
-:::
 
-::: {#9c3f6cf5 .cell .code execution_count="13"}
+</div>
+
+<div class="cell code" execution_count="13">
+
 ``` python
 df.dropna(subset=['Make','Model'],inplace=True)
 ```
-:::
 
-::: {#f2bafeac .cell .code execution_count="14"}
+</div>
+
+<div class="cell code" execution_count="14">
+
 ``` python
 df['Model'].unique
 ```
 
-::: {.output .execute_result execution_count="14"}
+<div class="output execute_result" execution_count="14">
+
     <bound method Series.unique of 0          PA-34-200T
     1                310N
     2             727-225
@@ -680,17 +453,22 @@ df['Model'].unique
     78274            210N
     78275       PA-24-260
     Name: Model, Length: 78185, dtype: object>
-:::
-:::
 
-::: {#c2323bdf .cell .markdown}
-### Normalizing text in Model column. {#normalizing-text-in-model-column}
+</div>
+
+</div>
+
+<div class="cell markdown">
+
+### Normalizing text in Model column.
 
 we normalize text by converting it to uppercase,stripping leading and
 trailing whitespace, and removing punctuation .
-:::
 
-::: {#a0e1b8a2 .cell .code execution_count="15"}
+</div>
+
+<div class="cell code" execution_count="15">
+
 ``` python
 # Convert "Model" column to lowercase
 df['Model'] = df['Model'].str.upper()
@@ -702,14 +480,17 @@ df['Model'] = df['Model'].str.strip()
 df['Model'] = df['Model'].str.replace('-', '', regex=True)
 
 ```
-:::
 
-::: {#12962dc1-d55b-4aa3-9166-d628e62a1e3a .cell .code execution_count="16"}
+</div>
+
+<div class="cell code" execution_count="16">
+
 ``` python
 df['Make'].unique
 ```
 
-::: {.output .execute_result execution_count="16"}
+<div class="output execute_result" execution_count="16">
+
     <bound method Series.unique of 0                             Piper
     1                            Cessna
     2                            Boeing
@@ -722,18 +503,23 @@ df['Make'].unique
     78274                        CESSNA
     78275                         PIPER
     Name: Make, Length: 78185, dtype: object>
-:::
-:::
 
-::: {#70d42d68 .cell .markdown}
-### Normalizing text in make column. {#normalizing-text-in-make-column}
+</div>
+
+</div>
+
+<div class="cell markdown">
+
+### Normalizing text in make column.
 
 define a function to normalize text by converting it to lowercase,
 removing punctuation, and stripping leading and trailing whitespace. We
-then apply this normalization to the \'Make\' column in the dataset.
-:::
+then apply this normalization to the 'Make' column in the dataset.
 
-::: {#61635fcb-fc3f-4bfe-a82e-0dfe5a577ec6 .cell .code execution_count="17"}
+</div>
+
+<div class="cell code" execution_count="17">
+
 ``` python
 # Define a function to normalize text
 def normalize_text(text):
@@ -748,14 +534,17 @@ def normalize_text(text):
 # Create a new column for the normalized values
 df['Make'] = df['Make'].apply(normalize_text)
 ```
-:::
 
-::: {#41934f28 .cell .code execution_count="18"}
+</div>
+
+<div class="cell code" execution_count="18">
+
 ``` python
 df.isnull().sum()
 ```
 
-::: {.output .execute_result execution_count="18"}
+<div class="output execute_result" execution_count="18">
+
     Event.Date                    0
     Location                     48
     Country                     179
@@ -773,16 +562,20 @@ df.isnull().sum()
     Weather.Condition          4438
     Broad.phase.of.flight     27082
     dtype: int64
-:::
-:::
 
-::: {#629c0165-5d3a-4844-9473-bfbce252059e .cell .code execution_count="19"}
+</div>
+
+</div>
+
+<div class="cell code" execution_count="19">
+
 ``` python
 df.shape
 percentage_missing(df)
 ```
 
-::: {.output .execute_result execution_count="19"}
+<div class="output execute_result" execution_count="19">
+
     Event.Date                 0.00
     Location                   0.06
     Country                    0.23
@@ -800,186 +593,92 @@ percentage_missing(df)
     Weather.Condition          5.68
     Broad.phase.of.flight     34.64
     dtype: float64
-:::
-:::
 
-::: {#3a847667-9e62-4a91-8cd4-3a33dd7841e5 .cell .markdown}
-#### Applying it to the dataframe\'s Aircraft category column. {#applying-it-to-the-dataframes-aircraft-category-column}
-:::
+</div>
 
-::: {#dfc4731f-cc7f-4dfc-b42f-cfce8f6f4846 .cell .code execution_count="20"}
+</div>
+
+<div class="cell markdown">
+
+#### Applying it to the dataframe's Aircraft category column.
+
+</div>
+
+<div class="cell code" execution_count="20">
+
 ``` python
 df.head()
 ```
 
-::: {.output .execute_result execution_count="20"}
-```{=html}
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="output execute_result" execution_count="20">
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+       Event.Date         Location        Country Injury.Severity Aircraft.damage  \
+    0  1985-01-01    HOPKINTON, NH  United States       Non-Fatal       Destroyed   
+    1  1985-01-01     EDGEWOOD, NM  United States        Fatal(2)       Destroyed   
+    2  1985-01-01  LA PAZ, Bolivia        Bolivia       Fatal(29)       Destroyed   
+    3  1985-01-01       ODESSA, FL  United States       Non-Fatal     Substantial   
+    4  1985-01-01       DUBLIN, NC  United States       Non-Fatal     Substantial   
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Event.Date</th>
-      <th>Location</th>
-      <th>Country</th>
-      <th>Injury.Severity</th>
-      <th>Aircraft.damage</th>
-      <th>Aircraft.Category</th>
-      <th>Make</th>
-      <th>Model</th>
-      <th>Total.Fatal.Injuries</th>
-      <th>Total.Serious.Injuries</th>
-      <th>Total.Minor.Injuries</th>
-      <th>Number.of.Engines</th>
-      <th>Engine.Type</th>
-      <th>Total.Uninjured</th>
-      <th>Weather.Condition</th>
-      <th>Broad.phase.of.flight</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1985-01-01</td>
-      <td>HOPKINTON, NH</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Destroyed</td>
-      <td>NaN</td>
-      <td>Piper</td>
-      <td>PA34200T</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>IMC</td>
-      <td>Approach</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1985-01-01</td>
-      <td>EDGEWOOD, NM</td>
-      <td>United States</td>
-      <td>Fatal(2)</td>
-      <td>Destroyed</td>
-      <td>NaN</td>
-      <td>Cessna</td>
-      <td>310N</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>IMC</td>
-      <td>Cruise</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>1985-01-01</td>
-      <td>LA PAZ, Bolivia</td>
-      <td>Bolivia</td>
-      <td>Fatal(29)</td>
-      <td>Destroyed</td>
-      <td>NaN</td>
-      <td>Boeing</td>
-      <td>727225</td>
-      <td>29.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>3.0</td>
-      <td>Turbo Fan</td>
-      <td>0.0</td>
-      <td>UNK</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>1985-01-01</td>
-      <td>ODESSA, FL</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>NaN</td>
-      <td>Fuji</td>
-      <td>LM1 "NIKKO"</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>VMC</td>
-      <td>Maneuvering</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>1985-01-01</td>
-      <td>DUBLIN, NC</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>NaN</td>
-      <td>Cessna</td>
-      <td>150J</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>1.0</td>
-      <td>VMC</td>
-      <td>Cruise</td>
-    </tr>
-  </tbody>
-</table>
+      Aircraft.Category    Make        Model  Total.Fatal.Injuries  \
+    0               NaN   Piper     PA34200T                   0.0   
+    1               NaN  Cessna         310N                   2.0   
+    2               NaN  Boeing       727225                  29.0   
+    3               NaN    Fuji  LM1 "NIKKO"                   0.0   
+    4               NaN  Cessna         150J                   0.0   
+
+       Total.Serious.Injuries  Total.Minor.Injuries  Number.of.Engines  \
+    0                     2.0                   0.0                2.0   
+    1                     0.0                   0.0                2.0   
+    2                     0.0                   0.0                3.0   
+    3                     2.0                   2.0                1.0   
+    4                     0.0                   0.0                1.0   
+
+         Engine.Type  Total.Uninjured Weather.Condition Broad.phase.of.flight  
+    0  Reciprocating              0.0               IMC              Approach  
+    1  Reciprocating              0.0               IMC                Cruise  
+    2      Turbo Fan              0.0               UNK                   NaN  
+    3  Reciprocating              0.0               VMC           Maneuvering  
+    4  Reciprocating              1.0               VMC                Cruise  
+
 </div>
-```
-:::
-:::
 
-::: {#1abdf635 .cell .code execution_count="21"}
+</div>
+
+<div class="cell code" execution_count="21">
+
 ``` python
 df.columns
 ```
 
-::: {.output .execute_result execution_count="21"}
+<div class="output execute_result" execution_count="21">
+
     Index(['Event.Date', 'Location', 'Country', 'Injury.Severity',
            'Aircraft.damage', 'Aircraft.Category', 'Make', 'Model',
            'Total.Fatal.Injuries', 'Total.Serious.Injuries',
            'Total.Minor.Injuries', 'Number.of.Engines', 'Engine.Type',
            'Total.Uninjured', 'Weather.Condition', 'Broad.phase.of.flight'],
           dtype='object')
-:::
-:::
 
-::: {#ea325c39 .cell .code execution_count="22"}
+</div>
+
+</div>
+
+<div class="cell code" execution_count="22">
+
 ``` python
 df.dropna(subset=['Location', 'Country', 'Injury.Severity'],inplace=True)
 ```
-:::
 
-::: {#4e64b9cb .cell .code execution_count="23"}
+</div>
+
+<div class="cell code" execution_count="23">
+
 ``` python
 percentage_missing(df)
 ```
 
-::: {.output .execute_result execution_count="23"}
+<div class="output execute_result" execution_count="23">
+
     Event.Date                 0.00
     Location                   0.00
     Country                    0.00
@@ -997,10 +696,13 @@ percentage_missing(df)
     Weather.Condition          4.59
     Broad.phase.of.flight     33.85
     dtype: float64
-:::
-:::
 
-::: {#10a83e63 .cell .markdown}
+</div>
+
+</div>
+
+<div class="cell markdown">
+
 ### Processing Injury Severity Data
 
 well extract the number of fatal injuries and clean up the severity
@@ -1017,9 +719,11 @@ fatality numbers from the Injury.Severity column.
 3.  Define a function to simplify the severity description by removing
     the fatality number.
 4.  Apply the function to clean the Injury.Severity column.
-:::
 
-::: {#27d5bf75 .cell .code execution_count="24"}
+</div>
+
+<div class="cell code" execution_count="24">
+
 ``` python
 # import re module .This module provides regular expression matching operations
 import re
@@ -1041,46 +745,54 @@ def simplify_severity(severity):
 # Applying the function to clean the Injury.Severity column
 df['Injury.Severity'] = df['Injury.Severity'].apply(simplify_severity)
 ```
-:::
 
-::: {#4f6e9f61 .cell .markdown}
-#### Imputing weather condition , aircraft damage anull values with mode {#imputing-weather-condition--aircraft-damage-anull-values-with-mode}
+</div>
 
-The code fills missing values in the \'Weather.Condition\' and
-\'Aircraft.damage\' columns with the most common value. It then converts
-the \'Weather.Condition\' values to uppercase for consistency.
-:::
+<div class="cell markdown">
 
-::: {#9b9e1147 .cell .code execution_count="25"}
+#### Imputing weather condition , aircraft damage anull values with mode
+
+The code fills missing values in the 'Weather.Condition' and
+'Aircraft.damage' columns with the most common value. It then converts
+the 'Weather.Condition' values to uppercase for consistency.
+
+</div>
+
+<div class="cell code" execution_count="25">
+
 ``` python
 df['Weather.Condition'].fillna(df['Weather.Condition'].mode()[0], inplace=True)
 df['Aircraft.damage'].fillna(df['Aircraft.damage'].mode()[0], inplace=True)
 df['Weather.Condition']=df['Weather.Condition'].str.upper()
 ```
-:::
 
-::: {#d242f31c .cell .markdown}
+</div>
+
+<div class="cell markdown">
+
 ### Handling Missing Values in Aircraft Data
 
 Missing values in various columns related to aircraft injuries, engines,
 engine type, and flight phase are filled using the mode of the
-respective columns within the same \'Make\' and \'Model\' groups. This
+respective columns within the same 'Make' and 'Model' groups. This
 approach ensures that missing data is imputed with the most common
 values specific to each aircraft make and model.
 
-#### Steps: {#steps}
+#### Steps:
 
-1.  Impute missing values for \'Total.Fatal.Injuries\',
-    \'Total.Serious.Injuries\', \'Total.Minor.Injuries\',
-    \'Total.Uninjured\', \'Number.of.Engines\', \'Engine.Type\',
-    \'Aircraft.Category\', and \'Broad.phase.of.flight\'.
-2.  Group the data by \'Make\' and \'Model\' to calculate the mode for
-    each column within these groups.
+1.  Impute missing values for 'Total.Fatal.Injuries',
+    'Total.Serious.Injuries', 'Total.Minor.Injuries', 'Total.Uninjured',
+    'Number.of.Engines', 'Engine.Type', 'Aircraft.Category', and
+    'Broad.phase.of.flight'.
+2.  Group the data by 'Make' and 'Model' to calculate the mode for each
+    column within these groups.
 3.  Fill missing values in each column with the mode value corresponding
-    to the respective \'Make\' and \'Model\' combination.
-:::
+    to the respective 'Make' and 'Model' combination.
 
-::: {#0f347cb2 .cell .code execution_count="26"}
+</div>
+
+<div class="cell code" execution_count="26">
+
 ``` python
 df['Total.Fatal.Injuries'] = df.groupby(['Make', 'Model'])['Total.Fatal.Injuries'].transform(lambda x: x.fillna(x.mode().max()))
 df['Total.Serious.Injuries'] = df.groupby(['Make', 'Model'])['Total.Serious.Injuries'].transform(lambda x: x.fillna(x.mode().max()))
@@ -1092,14 +804,17 @@ df['Aircraft.Category'] = df.groupby(['Make'])['Aircraft.Category'].transform(la
 df['Broad.phase.of.flight'] = df.groupby(['Make', 'Model'])['Broad.phase.of.flight'].transform(lambda x: x.fillna(x.mode().max()))
 
 ```
-:::
 
-::: {#efc95457 .cell .code execution_count="27"}
+</div>
+
+<div class="cell code" execution_count="27">
+
 ``` python
 percentage_missing (df)
 ```
 
-::: {.output .execute_result execution_count="27"}
+<div class="output execute_result" execution_count="27">
+
     Event.Date                 0.00
     Location                   0.00
     Country                    0.00
@@ -1117,161 +832,59 @@ percentage_missing (df)
     Weather.Condition          0.00
     Broad.phase.of.flight     11.01
     dtype: float64
-:::
-:::
 
-::: {#61706f8f .cell .code execution_count="28"}
+</div>
+
+</div>
+
+<div class="cell code" execution_count="28">
+
 ``` python
 df.head(5)
 ```
 
-::: {.output .execute_result execution_count="28"}
-```{=html}
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="output execute_result" execution_count="28">
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+       Event.Date         Location        Country Injury.Severity Aircraft.damage  \
+    0  1985-01-01    HOPKINTON, NH  United States       Non-Fatal       Destroyed   
+    1  1985-01-01     EDGEWOOD, NM  United States           Fatal       Destroyed   
+    2  1985-01-01  LA PAZ, Bolivia        Bolivia           Fatal       Destroyed   
+    3  1985-01-01       ODESSA, FL  United States       Non-Fatal     Substantial   
+    4  1985-01-01       DUBLIN, NC  United States       Non-Fatal     Substantial   
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Event.Date</th>
-      <th>Location</th>
-      <th>Country</th>
-      <th>Injury.Severity</th>
-      <th>Aircraft.damage</th>
-      <th>Aircraft.Category</th>
-      <th>Make</th>
-      <th>Model</th>
-      <th>Total.Fatal.Injuries</th>
-      <th>Total.Serious.Injuries</th>
-      <th>Total.Minor.Injuries</th>
-      <th>Number.of.Engines</th>
-      <th>Engine.Type</th>
-      <th>Total.Uninjured</th>
-      <th>Weather.Condition</th>
-      <th>Broad.phase.of.flight</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1985-01-01</td>
-      <td>HOPKINTON, NH</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Destroyed</td>
-      <td>Airplane</td>
-      <td>Piper</td>
-      <td>PA34200T</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>IMC</td>
-      <td>Approach</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1985-01-01</td>
-      <td>EDGEWOOD, NM</td>
-      <td>United States</td>
-      <td>Fatal</td>
-      <td>Destroyed</td>
-      <td>Airplane</td>
-      <td>Cessna</td>
-      <td>310N</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>IMC</td>
-      <td>Cruise</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>1985-01-01</td>
-      <td>LA PAZ, Bolivia</td>
-      <td>Bolivia</td>
-      <td>Fatal</td>
-      <td>Destroyed</td>
-      <td>Airplane</td>
-      <td>Boeing</td>
-      <td>727225</td>
-      <td>29.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>3.0</td>
-      <td>Turbo Fan</td>
-      <td>0.0</td>
-      <td>UNK</td>
-      <td>Cruise</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>1985-01-01</td>
-      <td>ODESSA, FL</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>Airplane</td>
-      <td>Fuji</td>
-      <td>LM1 "NIKKO"</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>VMC</td>
-      <td>Maneuvering</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>1985-01-01</td>
-      <td>DUBLIN, NC</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>Airplane</td>
-      <td>Cessna</td>
-      <td>150J</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>1.0</td>
-      <td>VMC</td>
-      <td>Cruise</td>
-    </tr>
-  </tbody>
-</table>
+      Aircraft.Category    Make        Model  Total.Fatal.Injuries  \
+    0          Airplane   Piper     PA34200T                   0.0   
+    1          Airplane  Cessna         310N                   2.0   
+    2          Airplane  Boeing       727225                  29.0   
+    3          Airplane    Fuji  LM1 "NIKKO"                   0.0   
+    4          Airplane  Cessna         150J                   0.0   
+
+       Total.Serious.Injuries  Total.Minor.Injuries  Number.of.Engines  \
+    0                     2.0                   0.0                2.0   
+    1                     0.0                   0.0                2.0   
+    2                     0.0                   0.0                3.0   
+    3                     2.0                   2.0                1.0   
+    4                     0.0                   0.0                1.0   
+
+         Engine.Type  Total.Uninjured Weather.Condition Broad.phase.of.flight  
+    0  Reciprocating              0.0               IMC              Approach  
+    1  Reciprocating              0.0               IMC                Cruise  
+    2      Turbo Fan              0.0               UNK                Cruise  
+    3  Reciprocating              0.0               VMC           Maneuvering  
+    4  Reciprocating              1.0               VMC                Cruise  
+
 </div>
-```
-:::
-:::
 
-::: {#a39939ff .cell .code execution_count="29"}
+</div>
+
+<div class="cell code" execution_count="29">
+
 ``` python
 percentage_missing(df)
 ```
 
-::: {.output .execute_result execution_count="29"}
+<div class="output execute_result" execution_count="29">
+
     Event.Date                 0.00
     Location                   0.00
     Country                    0.00
@@ -1289,14 +902,19 @@ percentage_missing(df)
     Weather.Condition          0.00
     Broad.phase.of.flight     11.01
     dtype: float64
-:::
-:::
 
-::: {#0e0c29a5 .cell .markdown}
-#### Imputing the rest with mode. {#imputing-the-rest-with-mode}
-:::
+</div>
 
-::: {#4833e580 .cell .code execution_count="30"}
+</div>
+
+<div class="cell markdown">
+
+#### Imputing the rest with mode.
+
+</div>
+
+<div class="cell code" execution_count="30">
+
 ``` python
 df['Total.Serious.Injuries'] = df['Total.Serious.Injuries'].fillna(df['Total.Serious.Injuries'].mode()[0])
 df['Total.Minor.Injuries'] = df['Total.Minor.Injuries'].fillna(df['Total.Minor.Injuries'].mode()[0])
@@ -1304,14 +922,17 @@ df['Number.of.Engines'] = df['Number.of.Engines'].fillna(df['Number.of.Engines']
 df['Total.Uninjured'] = df['Total.Uninjured'].fillna(df['Total.Uninjured'].mode()[0])
 
 ```
-:::
 
-::: {#7f5bdb6a .cell .code execution_count="31"}
+</div>
+
+<div class="cell code" execution_count="31">
+
 ``` python
 percentage_missing(df)
 ```
 
-::: {.output .execute_result execution_count="31"}
+<div class="output execute_result" execution_count="31">
+
     Event.Date                 0.00
     Location                   0.00
     Country                    0.00
@@ -1329,29 +950,39 @@ percentage_missing(df)
     Weather.Condition          0.00
     Broad.phase.of.flight     11.01
     dtype: float64
-:::
-:::
 
-::: {#26a95aee .cell .markdown}
-### Normalization of the Injury severity by extracting the casualties to the right column(Total.Fatatl.Injuries) {#normalization-of-the-injury-severity-by-extracting-the-casualties-to-the-right-columntotalfatatlinjuries}
-:::
+</div>
 
-::: {#0043bda4 .cell .markdown}
+</div>
+
+<div class="cell markdown">
+
+### Normalization of the Injury severity by extracting the casualties to the right column(Total.Fatatl.Injuries)
+
+</div>
+
+<div class="cell markdown">
+
 #### droppping remaining null containing rows
-:::
 
-::: {#38dc1d9b .cell .code execution_count="32"}
+</div>
+
+<div class="cell code" execution_count="32">
+
 ``` python
 df = df.dropna(subset=['Total.Fatal.Injuries', 'Engine.Type'])
 ```
-:::
 
-::: {#9220e122 .cell .code execution_count="33"}
+</div>
+
+<div class="cell code" execution_count="33">
+
 ``` python
 percentage_missing(df)
 ```
 
-::: {.output .execute_result execution_count="33"}
+<div class="output execute_result" execution_count="33">
+
     Event.Date                0.00
     Location                  0.00
     Country                   0.00
@@ -1369,156 +1000,53 @@ percentage_missing(df)
     Weather.Condition         0.00
     Broad.phase.of.flight     9.76
     dtype: float64
-:::
-:::
 
-::: {#c99c5bdd .cell .code execution_count="34"}
+</div>
+
+</div>
+
+<div class="cell code" execution_count="34">
+
 ``` python
 df.head()
 ```
 
-::: {.output .execute_result execution_count="34"}
-```{=html}
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="output execute_result" execution_count="34">
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+       Event.Date         Location        Country Injury.Severity Aircraft.damage  \
+    0  1985-01-01    HOPKINTON, NH  United States       Non-Fatal       Destroyed   
+    1  1985-01-01     EDGEWOOD, NM  United States           Fatal       Destroyed   
+    2  1985-01-01  LA PAZ, Bolivia        Bolivia           Fatal       Destroyed   
+    3  1985-01-01       ODESSA, FL  United States       Non-Fatal     Substantial   
+    4  1985-01-01       DUBLIN, NC  United States       Non-Fatal     Substantial   
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Event.Date</th>
-      <th>Location</th>
-      <th>Country</th>
-      <th>Injury.Severity</th>
-      <th>Aircraft.damage</th>
-      <th>Aircraft.Category</th>
-      <th>Make</th>
-      <th>Model</th>
-      <th>Total.Fatal.Injuries</th>
-      <th>Total.Serious.Injuries</th>
-      <th>Total.Minor.Injuries</th>
-      <th>Number.of.Engines</th>
-      <th>Engine.Type</th>
-      <th>Total.Uninjured</th>
-      <th>Weather.Condition</th>
-      <th>Broad.phase.of.flight</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1985-01-01</td>
-      <td>HOPKINTON, NH</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Destroyed</td>
-      <td>Airplane</td>
-      <td>Piper</td>
-      <td>PA34200T</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>IMC</td>
-      <td>Approach</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1985-01-01</td>
-      <td>EDGEWOOD, NM</td>
-      <td>United States</td>
-      <td>Fatal</td>
-      <td>Destroyed</td>
-      <td>Airplane</td>
-      <td>Cessna</td>
-      <td>310N</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>IMC</td>
-      <td>Cruise</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>1985-01-01</td>
-      <td>LA PAZ, Bolivia</td>
-      <td>Bolivia</td>
-      <td>Fatal</td>
-      <td>Destroyed</td>
-      <td>Airplane</td>
-      <td>Boeing</td>
-      <td>727225</td>
-      <td>29.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>3.0</td>
-      <td>Turbo Fan</td>
-      <td>0.0</td>
-      <td>UNK</td>
-      <td>Cruise</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>1985-01-01</td>
-      <td>ODESSA, FL</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>Airplane</td>
-      <td>Fuji</td>
-      <td>LM1 "NIKKO"</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>VMC</td>
-      <td>Maneuvering</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>1985-01-01</td>
-      <td>DUBLIN, NC</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>Airplane</td>
-      <td>Cessna</td>
-      <td>150J</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>1.0</td>
-      <td>VMC</td>
-      <td>Cruise</td>
-    </tr>
-  </tbody>
-</table>
+      Aircraft.Category    Make        Model  Total.Fatal.Injuries  \
+    0          Airplane   Piper     PA34200T                   0.0   
+    1          Airplane  Cessna         310N                   2.0   
+    2          Airplane  Boeing       727225                  29.0   
+    3          Airplane    Fuji  LM1 "NIKKO"                   0.0   
+    4          Airplane  Cessna         150J                   0.0   
+
+       Total.Serious.Injuries  Total.Minor.Injuries  Number.of.Engines  \
+    0                     2.0                   0.0                2.0   
+    1                     0.0                   0.0                2.0   
+    2                     0.0                   0.0                3.0   
+    3                     2.0                   2.0                1.0   
+    4                     0.0                   0.0                1.0   
+
+         Engine.Type  Total.Uninjured Weather.Condition Broad.phase.of.flight  
+    0  Reciprocating              0.0               IMC              Approach  
+    1  Reciprocating              0.0               IMC                Cruise  
+    2      Turbo Fan              0.0               UNK                Cruise  
+    3  Reciprocating              0.0               VMC           Maneuvering  
+    4  Reciprocating              1.0               VMC                Cruise  
+
 </div>
-```
-:::
-:::
 
-::: {#ed6a62b1 .cell .code execution_count="35"}
+</div>
+
+<div class="cell code" execution_count="35">
+
 ``` python
 df['Event.Date']= pd.to_datetime(df['Event.Date'],format='%Y-%m-%d')
 df['Year']=df['Event.Date'].dt.year
@@ -1528,718 +1056,214 @@ df['Day']=df['Event.Date'].dt.day
 df.head()
 ```
 
-::: {.output .execute_result execution_count="35"}
-```{=html}
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="output execute_result" execution_count="35">
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+      Event.Date         Location        Country Injury.Severity Aircraft.damage  \
+    0 1985-01-01    HOPKINTON, NH  United States       Non-Fatal       Destroyed   
+    1 1985-01-01     EDGEWOOD, NM  United States           Fatal       Destroyed   
+    2 1985-01-01  LA PAZ, Bolivia        Bolivia           Fatal       Destroyed   
+    3 1985-01-01       ODESSA, FL  United States       Non-Fatal     Substantial   
+    4 1985-01-01       DUBLIN, NC  United States       Non-Fatal     Substantial   
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Event.Date</th>
-      <th>Location</th>
-      <th>Country</th>
-      <th>Injury.Severity</th>
-      <th>Aircraft.damage</th>
-      <th>Aircraft.Category</th>
-      <th>Make</th>
-      <th>Model</th>
-      <th>Total.Fatal.Injuries</th>
-      <th>Total.Serious.Injuries</th>
-      <th>Total.Minor.Injuries</th>
-      <th>Number.of.Engines</th>
-      <th>Engine.Type</th>
-      <th>Total.Uninjured</th>
-      <th>Weather.Condition</th>
-      <th>Broad.phase.of.flight</th>
-      <th>Year</th>
-      <th>Month</th>
-      <th>Day</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1985-01-01</td>
-      <td>HOPKINTON, NH</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Destroyed</td>
-      <td>Airplane</td>
-      <td>Piper</td>
-      <td>PA34200T</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>IMC</td>
-      <td>Approach</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1985-01-01</td>
-      <td>EDGEWOOD, NM</td>
-      <td>United States</td>
-      <td>Fatal</td>
-      <td>Destroyed</td>
-      <td>Airplane</td>
-      <td>Cessna</td>
-      <td>310N</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>IMC</td>
-      <td>Cruise</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>1985-01-01</td>
-      <td>LA PAZ, Bolivia</td>
-      <td>Bolivia</td>
-      <td>Fatal</td>
-      <td>Destroyed</td>
-      <td>Airplane</td>
-      <td>Boeing</td>
-      <td>727225</td>
-      <td>29.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>3.0</td>
-      <td>Turbo Fan</td>
-      <td>0.0</td>
-      <td>UNK</td>
-      <td>Cruise</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>1985-01-01</td>
-      <td>ODESSA, FL</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>Airplane</td>
-      <td>Fuji</td>
-      <td>LM1 "NIKKO"</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>VMC</td>
-      <td>Maneuvering</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>1985-01-01</td>
-      <td>DUBLIN, NC</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>Airplane</td>
-      <td>Cessna</td>
-      <td>150J</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>1.0</td>
-      <td>VMC</td>
-      <td>Cruise</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-  </tbody>
-</table>
+      Aircraft.Category    Make        Model  Total.Fatal.Injuries  \
+    0          Airplane   Piper     PA34200T                   0.0   
+    1          Airplane  Cessna         310N                   2.0   
+    2          Airplane  Boeing       727225                  29.0   
+    3          Airplane    Fuji  LM1 "NIKKO"                   0.0   
+    4          Airplane  Cessna         150J                   0.0   
+
+       Total.Serious.Injuries  Total.Minor.Injuries  Number.of.Engines  \
+    0                     2.0                   0.0                2.0   
+    1                     0.0                   0.0                2.0   
+    2                     0.0                   0.0                3.0   
+    3                     2.0                   2.0                1.0   
+    4                     0.0                   0.0                1.0   
+
+         Engine.Type  Total.Uninjured Weather.Condition Broad.phase.of.flight  \
+    0  Reciprocating              0.0               IMC              Approach   
+    1  Reciprocating              0.0               IMC                Cruise   
+    2      Turbo Fan              0.0               UNK                Cruise   
+    3  Reciprocating              0.0               VMC           Maneuvering   
+    4  Reciprocating              1.0               VMC                Cruise   
+
+       Year  Month  Day  
+    0  1985      1    1  
+    1  1985      1    1  
+    2  1985      1    1  
+    3  1985      1    1  
+    4  1985      1    1  
+
 </div>
-```
-:::
-:::
 
-::: {#184b14ad .cell .markdown}
+</div>
+
+<div class="cell markdown">
+
 #### Calculate New columns to be used in the visualizations:
-:::
 
-::: {#3079eece .cell .code execution_count="36"}
+</div>
+
+<div class="cell code" execution_count="36">
+
 ``` python
 df['Total.Injuries'] = df['Total.Fatal.Injuries'] + df['Total.Serious.Injuries'] + df['Total.Minor.Injuries']
 df['Injury.Severity.Index'] = df['Total.Fatal.Injuries']*3 + df['Total.Serious.Injuries']*2 + df['Total.Minor.Injuries']
 ```
-:::
 
-::: {#fe83a683 .cell .code execution_count="37"}
+</div>
+
+<div class="cell code" execution_count="37">
+
 ``` python
 df.sort_values(by='Event.Date').head(20)
 ```
 
-::: {.output .execute_result execution_count="37"}
-```{=html}
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="output execute_result" execution_count="37">
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+       Event.Date            Location        Country Injury.Severity  \
+    0  1985-01-01       HOPKINTON, NH  United States       Non-Fatal   
+    1  1985-01-01        EDGEWOOD, NM  United States           Fatal   
+    2  1985-01-01     LA PAZ, Bolivia        Bolivia           Fatal   
+    3  1985-01-01          ODESSA, FL  United States       Non-Fatal   
+    4  1985-01-01          DUBLIN, NC  United States       Non-Fatal   
+    5  1985-01-02     PAWNEE CITY, NE  United States           Fatal   
+    6  1985-01-02       LORDSBURG, NM  United States       Non-Fatal   
+    7  1985-01-02           YODER, CO  United States       Non-Fatal   
+    8  1985-01-02     MT STERLING, IL  United States       Non-Fatal   
+    9  1985-01-03  SALT LAKE CITY, UT  United States       Non-Fatal   
+    10 1985-01-03       MANHATTAN, MT  United States           Fatal   
+    11 1985-01-03      ELLISONORE, MO  United States       Non-Fatal   
+    12 1985-01-03   SANTA BARBARA, CA  United States       Non-Fatal   
+    19 1985-01-04         NUIQSUT, AK  United States       Non-Fatal   
+    18 1985-01-04         RAWLINS, WY  United States       Non-Fatal   
+    16 1985-01-04       CAMARILLO, CA  United States       Non-Fatal   
+    17 1985-01-04        BILLINGS, MT  United States       Non-Fatal   
+    14 1985-01-04       ST. LOUIS, MO  United States        Incident   
+    13 1985-01-04          NEWARK, NJ  United States           Fatal   
+    15 1985-01-04      WEST POINT, VA  United States           Fatal   
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Event.Date</th>
-      <th>Location</th>
-      <th>Country</th>
-      <th>Injury.Severity</th>
-      <th>Aircraft.damage</th>
-      <th>Aircraft.Category</th>
-      <th>Make</th>
-      <th>Model</th>
-      <th>Total.Fatal.Injuries</th>
-      <th>Total.Serious.Injuries</th>
-      <th>Total.Minor.Injuries</th>
-      <th>Number.of.Engines</th>
-      <th>Engine.Type</th>
-      <th>Total.Uninjured</th>
-      <th>Weather.Condition</th>
-      <th>Broad.phase.of.flight</th>
-      <th>Year</th>
-      <th>Month</th>
-      <th>Day</th>
-      <th>Total.Injuries</th>
-      <th>Injury.Severity.Index</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1985-01-01</td>
-      <td>HOPKINTON, NH</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Destroyed</td>
-      <td>Airplane</td>
-      <td>Piper</td>
-      <td>PA34200T</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>IMC</td>
-      <td>Approach</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>1</td>
-      <td>2.0</td>
-      <td>4.0</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1985-01-01</td>
-      <td>EDGEWOOD, NM</td>
-      <td>United States</td>
-      <td>Fatal</td>
-      <td>Destroyed</td>
-      <td>Airplane</td>
-      <td>Cessna</td>
-      <td>310N</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>IMC</td>
-      <td>Cruise</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>1</td>
-      <td>2.0</td>
-      <td>6.0</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>1985-01-01</td>
-      <td>LA PAZ, Bolivia</td>
-      <td>Bolivia</td>
-      <td>Fatal</td>
-      <td>Destroyed</td>
-      <td>Airplane</td>
-      <td>Boeing</td>
-      <td>727225</td>
-      <td>29.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>3.0</td>
-      <td>Turbo Fan</td>
-      <td>0.0</td>
-      <td>UNK</td>
-      <td>Cruise</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>1</td>
-      <td>29.0</td>
-      <td>87.0</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>1985-01-01</td>
-      <td>ODESSA, FL</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>Airplane</td>
-      <td>Fuji</td>
-      <td>LM1 "NIKKO"</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>VMC</td>
-      <td>Maneuvering</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>1</td>
-      <td>4.0</td>
-      <td>6.0</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>1985-01-01</td>
-      <td>DUBLIN, NC</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>Airplane</td>
-      <td>Cessna</td>
-      <td>150J</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>1.0</td>
-      <td>VMC</td>
-      <td>Cruise</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>1985-01-02</td>
-      <td>PAWNEE CITY, NE</td>
-      <td>United States</td>
-      <td>Fatal</td>
-      <td>Substantial</td>
-      <td>Airplane</td>
-      <td>Cessna</td>
-      <td>150F</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>VMC</td>
-      <td>Maneuvering</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>2</td>
-      <td>2.0</td>
-      <td>5.0</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>1985-01-02</td>
-      <td>LORDSBURG, NM</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>Airplane</td>
-      <td>Cessna</td>
-      <td>210B</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>5.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>VMC</td>
-      <td>Cruise</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>2</td>
-      <td>5.0</td>
-      <td>5.0</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>1985-01-02</td>
-      <td>YODER, CO</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>Airplane</td>
-      <td>Piper</td>
-      <td>PA28181</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>3.0</td>
-      <td>VMC</td>
-      <td>Cruise</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>2</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>1985-01-02</td>
-      <td>MT STERLING, IL</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>Airplane</td>
-      <td>Cessna</td>
-      <td>172M</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>5.0</td>
-      <td>VMC</td>
-      <td>Landing</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>2</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>1985-01-03</td>
-      <td>SALT LAKE CITY, UT</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Destroyed</td>
-      <td>Helicopter</td>
-      <td>Aerospatiale</td>
-      <td>SA315B</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>Turbo Shaft</td>
-      <td>0.0</td>
-      <td>VMC</td>
-      <td>Maneuvering</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>3</td>
-      <td>1.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>1985-01-03</td>
-      <td>MANHATTAN, MT</td>
-      <td>United States</td>
-      <td>Fatal</td>
-      <td>Destroyed</td>
-      <td>NaN</td>
-      <td>Polliwagen</td>
-      <td>2 PLACE</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>VMC</td>
-      <td>Descent</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>3</td>
-      <td>1.0</td>
-      <td>3.0</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>1985-01-03</td>
-      <td>ELLISONORE, MO</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>Airplane</td>
-      <td>Cessna</td>
-      <td>182P</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>4.0</td>
-      <td>IMC</td>
-      <td>Cruise</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>3</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>1985-01-03</td>
-      <td>SANTA BARBARA, CA</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>Helicopter</td>
-      <td>Bell</td>
-      <td>20611</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>Turbo Shaft</td>
-      <td>2.0</td>
-      <td>VMC</td>
-      <td>Climb</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>3</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>19</th>
-      <td>1985-01-04</td>
-      <td>NUIQSUT, AK</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>Airplane</td>
-      <td>Cessna</td>
-      <td>207A</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>2.0</td>
-      <td>VMC</td>
-      <td>Landing</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>4</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>1985-01-04</td>
-      <td>RAWLINS, WY</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>Airplane</td>
-      <td>Piper</td>
-      <td>PA18150</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>0.0</td>
-      <td>VMC</td>
-      <td>Cruise</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>4</td>
-      <td>2.0</td>
-      <td>2.0</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>1985-01-04</td>
-      <td>CAMARILLO, CA</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>Airplane</td>
-      <td>Cessna</td>
-      <td>172RG</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>3.0</td>
-      <td>VMC</td>
-      <td>Landing</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>4</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>1985-01-04</td>
-      <td>BILLINGS, MT</td>
-      <td>United States</td>
-      <td>Non-Fatal</td>
-      <td>Substantial</td>
-      <td>Airplane</td>
-      <td>Beech</td>
-      <td>B36TC</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>Reciprocating</td>
-      <td>1.0</td>
-      <td>VMC</td>
-      <td>Cruise</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>4</td>
-      <td>1.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>1985-01-04</td>
-      <td>ST. LOUIS, MO</td>
-      <td>United States</td>
-      <td>Incident</td>
-      <td>Substantial</td>
-      <td>Airplane</td>
-      <td>Swearingen</td>
-      <td>SA226TC</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>Turbo Prop</td>
-      <td>5.0</td>
-      <td>VMC</td>
-      <td>Cruise</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>4</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>1985-01-04</td>
-      <td>NEWARK, NJ</td>
-      <td>United States</td>
-      <td>Fatal</td>
-      <td>Minor</td>
-      <td>Helicopter</td>
-      <td>Hughes</td>
-      <td>500D</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>Turbo Shaft</td>
-      <td>2.0</td>
-      <td>VMC</td>
-      <td>Standing</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>4</td>
-      <td>1.0</td>
-      <td>3.0</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>1985-01-04</td>
-      <td>WEST POINT, VA</td>
-      <td>United States</td>
-      <td>Fatal</td>
-      <td>Destroyed</td>
-      <td>Airplane</td>
-      <td>Mitsubishi</td>
-      <td>MU2B25</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>Turbo Prop</td>
-      <td>0.0</td>
-      <td>IMC</td>
-      <td>Approach</td>
-      <td>1985</td>
-      <td>1</td>
-      <td>4</td>
-      <td>1.0</td>
-      <td>3.0</td>
-    </tr>
-  </tbody>
-</table>
+       Aircraft.damage Aircraft.Category          Make        Model  \
+    0        Destroyed          Airplane         Piper     PA34200T   
+    1        Destroyed          Airplane        Cessna         310N   
+    2        Destroyed          Airplane        Boeing       727225   
+    3      Substantial          Airplane          Fuji  LM1 "NIKKO"   
+    4      Substantial          Airplane        Cessna         150J   
+    5      Substantial          Airplane        Cessna         150F   
+    6      Substantial          Airplane        Cessna         210B   
+    7      Substantial          Airplane         Piper      PA28181   
+    8      Substantial          Airplane        Cessna         172M   
+    9        Destroyed        Helicopter  Aerospatiale       SA315B   
+    10       Destroyed               NaN    Polliwagen      2 PLACE   
+    11     Substantial          Airplane        Cessna         182P   
+    12     Substantial        Helicopter          Bell        20611   
+    19     Substantial          Airplane        Cessna         207A   
+    18     Substantial          Airplane         Piper      PA18150   
+    16     Substantial          Airplane        Cessna        172RG   
+    17     Substantial          Airplane         Beech        B36TC   
+    14     Substantial          Airplane    Swearingen      SA226TC   
+    13           Minor        Helicopter        Hughes         500D   
+    15       Destroyed          Airplane    Mitsubishi       MU2B25   
+
+        Total.Fatal.Injuries  Total.Serious.Injuries  Total.Minor.Injuries  \
+    0                    0.0                     2.0                   0.0   
+    1                    2.0                     0.0                   0.0   
+    2                   29.0                     0.0                   0.0   
+    3                    0.0                     2.0                   2.0   
+    4                    0.0                     0.0                   0.0   
+    5                    1.0                     1.0                   0.0   
+    6                    0.0                     0.0                   5.0   
+    7                    0.0                     0.0                   0.0   
+    8                    0.0                     0.0                   0.0   
+    9                    0.0                     0.0                   1.0   
+    10                   1.0                     0.0                   0.0   
+    11                   0.0                     0.0                   0.0   
+    12                   0.0                     0.0                   0.0   
+    19                   0.0                     0.0                   0.0   
+    18                   0.0                     0.0                   2.0   
+    16                   0.0                     0.0                   0.0   
+    17                   0.0                     0.0                   1.0   
+    14                   0.0                     0.0                   0.0   
+    13                   1.0                     0.0                   0.0   
+    15                   1.0                     0.0                   0.0   
+
+        Number.of.Engines    Engine.Type  Total.Uninjured Weather.Condition  \
+    0                 2.0  Reciprocating              0.0               IMC   
+    1                 2.0  Reciprocating              0.0               IMC   
+    2                 3.0      Turbo Fan              0.0               UNK   
+    3                 1.0  Reciprocating              0.0               VMC   
+    4                 1.0  Reciprocating              1.0               VMC   
+    5                 1.0  Reciprocating              0.0               VMC   
+    6                 1.0  Reciprocating              0.0               VMC   
+    7                 1.0  Reciprocating              3.0               VMC   
+    8                 1.0  Reciprocating              5.0               VMC   
+    9                 1.0    Turbo Shaft              0.0               VMC   
+    10                1.0  Reciprocating              0.0               VMC   
+    11                1.0  Reciprocating              4.0               IMC   
+    12                1.0    Turbo Shaft              2.0               VMC   
+    19                1.0  Reciprocating              2.0               VMC   
+    18                1.0  Reciprocating              0.0               VMC   
+    16                1.0  Reciprocating              3.0               VMC   
+    17                1.0  Reciprocating              1.0               VMC   
+    14                2.0     Turbo Prop              5.0               VMC   
+    13                1.0    Turbo Shaft              2.0               VMC   
+    15                2.0     Turbo Prop              0.0               IMC   
+
+       Broad.phase.of.flight  Year  Month  Day  Total.Injuries  \
+    0               Approach  1985      1    1             2.0   
+    1                 Cruise  1985      1    1             2.0   
+    2                 Cruise  1985      1    1            29.0   
+    3            Maneuvering  1985      1    1             4.0   
+    4                 Cruise  1985      1    1             0.0   
+    5            Maneuvering  1985      1    2             2.0   
+    6                 Cruise  1985      1    2             5.0   
+    7                 Cruise  1985      1    2             0.0   
+    8                Landing  1985      1    2             0.0   
+    9            Maneuvering  1985      1    3             1.0   
+    10               Descent  1985      1    3             1.0   
+    11                Cruise  1985      1    3             0.0   
+    12                 Climb  1985      1    3             0.0   
+    19               Landing  1985      1    4             0.0   
+    18                Cruise  1985      1    4             2.0   
+    16               Landing  1985      1    4             0.0   
+    17                Cruise  1985      1    4             1.0   
+    14                Cruise  1985      1    4             0.0   
+    13              Standing  1985      1    4             1.0   
+    15              Approach  1985      1    4             1.0   
+
+        Injury.Severity.Index  
+    0                     4.0  
+    1                     6.0  
+    2                    87.0  
+    3                     6.0  
+    4                     0.0  
+    5                     5.0  
+    6                     5.0  
+    7                     0.0  
+    8                     0.0  
+    9                     1.0  
+    10                    3.0  
+    11                    0.0  
+    12                    0.0  
+    19                    0.0  
+    18                    2.0  
+    16                    0.0  
+    17                    1.0  
+    14                    0.0  
+    13                    3.0  
+    15                    3.0  
+
 </div>
-```
-:::
-:::
 
-::: {#978b8b28 .cell .code execution_count="38"}
+</div>
+
+<div class="cell code" execution_count="38">
+
 ``` python
 percentage_missing(df)
 ```
 
-::: {.output .execute_result execution_count="38"}
+<div class="output execute_result" execution_count="38">
+
     Event.Date                0.00
     Location                  0.00
     Country                   0.00
@@ -2262,29 +1286,37 @@ percentage_missing(df)
     Total.Injuries            0.00
     Injury.Severity.Index     0.00
     dtype: float64
-:::
-:::
 
-::: {#40d963aa .cell .code execution_count="39"}
+</div>
+
+</div>
+
+<div class="cell code" execution_count="39">
+
 ``` python
 df['Aircraft.Category'] = df.groupby(['Make','Model'])['Aircraft.Category'].bfill()
 df['Broad.phase.of.flight'] = df.groupby(['Make','Model'])['Broad.phase.of.flight'].bfill()
 ```
-:::
 
-::: {#dfe1ee2f .cell .code execution_count="40"}
+</div>
+
+<div class="cell code" execution_count="40">
+
 ``` python
 df['Broad.phase.of.flight']=df['Broad.phase.of.flight'].fillna('Unknown')
 df.dropna(subset=['Aircraft.Category'],axis=0 , inplace=True)
 ```
-:::
 
-::: {#bab44271 .cell .code execution_count="41"}
+</div>
+
+<div class="cell code" execution_count="41">
+
 ``` python
 percentage_missing(df)
 ```
 
-::: {.output .execute_result execution_count="41"}
+<div class="output execute_result" execution_count="41">
+
     Event.Date                0.0
     Location                  0.0
     Country                   0.0
@@ -2307,15 +1339,19 @@ percentage_missing(df)
     Total.Injuries            0.0
     Injury.Severity.Index     0.0
     dtype: float64
-:::
-:::
 
-::: {#c21b27d2 .cell .code execution_count="42"}
+</div>
+
+</div>
+
+<div class="cell code" execution_count="42">
+
 ``` python
 df.info()
 ```
 
-::: {.output .stream .stdout}
+<div class="output stream stdout">
+
     <class 'pandas.core.frame.DataFrame'>
     Index: 70563 entries, 0 to 78275
     Data columns (total 21 columns):
@@ -2344,30 +1380,35 @@ df.info()
      20  Injury.Severity.Index   70563 non-null  float64       
     dtypes: datetime64[ns](1), float64(7), int32(3), object(10)
     memory usage: 11.0+ MB
-:::
-:::
 
-::: {#1de1c888 .cell .markdown}
+</div>
+
+</div>
+
+<div class="cell markdown">
+
 ### Standardizing Identifiers in Airplane Data
 
-In the code below, we are standardizing the identifiers for \'Make\' and
-\'Model\' columns in the airplane data CSV file using fuzzy matching.
-This process aims to ensure consistency and accuracy in the
-identification of aircraft makes and models.
+In the code below, we are standardizing the identifiers for 'Make' and
+'Model' columns in the airplane data CSV file using fuzzy matching. This
+process aims to ensure consistency and accuracy in the identification of
+aircraft makes and models.
 
-#### Steps: {#steps}
+#### Steps:
 
 1.  Load the airplane data CSV file.
-2.  Define functions to standardize \'Make\' and \'Model\' identifiers
-    using fuzzy matching.
-3.  Generate standard dictionaries for \'Make\' and \'Model\'.
-4.  Update the \'Make\' and \'Model\' columns with the standardized
+2.  Define functions to standardize 'Make' and 'Model' identifiers using
+    fuzzy matching.
+3.  Generate standard dictionaries for 'Make' and 'Model'.
+4.  Update the 'Make' and 'Model' columns with the standardized
     identifiers.
 
-Let\'s proceed with the standardization process:
-:::
+Let's proceed with the standardization process:
 
-::: {#a91ae64b .cell .code execution_count="43"}
+</div>
+
+<div class="cell code" execution_count="43">
+
 ``` python
 import pandas as pd
 from fuzzywuzzy import process
@@ -2403,21 +1444,27 @@ standard_dict_model = standardize_model(df_airplane)
 df_airplane['Make'] = df_airplane['Make'].map(standard_dict_make)
 df_airplane['Model'] = df_airplane['Model'].map(standard_dict_model)
 ```
-:::
 
-::: {#94a59c08 .cell .markdown}
+</div>
+
+<div class="cell markdown">
+
 ## PLOTTING
-:::
 
-::: {#db4b7aef .cell .markdown}
-#### 1. Trend of Total Accidents Over Time {#1-trend-of-total-accidents-over-time}
+</div>
+
+<div class="cell markdown">
+
+#### 1. Trend of Total Accidents Over Time
 
 #### Objective: To analyze the trend of accidents over the years by plotting a Line chart
 
-#### showing the number of accidents per year. {#showing-the-number-of-accidents-per-year}
-:::
+#### showing the number of accidents per year.
 
-::: {#16d27969 .cell .code execution_count="44"}
+</div>
+
+<div class="cell code" execution_count="44">
+
 ``` python
 # Group the data by 'Year' and count the number of occurrences (accidents) for each year
 df_yearly = df.groupby('Year').size()
@@ -2445,19 +1492,25 @@ plt.grid(True)
 plt.show()
 ```
 
-::: {.output .display_data}
-![](vertopal_5ceed5ccf1f543d8af87389819b9ee48/d4c920b3098379dec7d1b06f4c6657b6c1ea6c56.png)
-:::
-:::
+<div class="output display_data">
 
-::: {#e8fa0e39 .cell .markdown}
-### 2. Top Aircraft Makes by least Number of Accidents {#2-top-aircraft-makes-by-least-number-of-accidents}
+![](d4c920b3098379dec7d1b06f4c6657b6c1ea6c56.png)
+
+</div>
+
+</div>
+
+<div class="cell markdown">
+
+### 2. Top Aircraft Makes by least Number of Accidents
 
 **Objective:** Identify the top 10 aircraft makes (companies) by the
 number of accidents.
-:::
 
-::: {#bd2f7c6f .cell .code execution_count="45"}
+</div>
+
+<div class="cell code" execution_count="45">
+
 ``` python
 # Count each unique value in the 'Make' column and select the top 10 most frequent ones
 df_make = df['Make'].value_counts().tail(10)
@@ -2486,19 +1539,25 @@ plt.xticks(rotation=55)
 plt.show()
 ```
 
-::: {.output .display_data}
-![](vertopal_5ceed5ccf1f543d8af87389819b9ee48/df0e7512433a97739a8aa691854e0af0333709dc.png)
-:::
-:::
+<div class="output display_data">
 
-::: {#b6c4ecab .cell .markdown}
-### 3. Number of Accidents Under Different Weather Conditions {#3-number-of-accidents-under-different-weather-conditions}
+![](df0e7512433a97739a8aa691854e0af0333709dc.png)
+
+</div>
+
+</div>
+
+<div class="cell markdown">
+
+### 3. Number of Accidents Under Different Weather Conditions
 
 **Objective:** Analyze the number of accidents under different weather
 conditions.
-:::
 
-::: {#4a3244b4 .cell .code execution_count="46"}
+</div>
+
+<div class="cell code" execution_count="46">
+
 ``` python
 # Count  each unique value in the 'Weather.Condition' column
 df_weather = df['Weather.Condition'].value_counts()
@@ -2527,23 +1586,31 @@ plt.xticks(rotation=45)
 plt.show()
 ```
 
-::: {.output .display_data}
-![](vertopal_5ceed5ccf1f543d8af87389819b9ee48/2c9dd9fcdd8dc4c168cdcce8069ac8475d5d5fd6.png)
-:::
-:::
+<div class="output display_data">
 
-::: {#dd5880f4 .cell .markdown}
+![](2c9dd9fcdd8dc4c168cdcce8069ac8475d5d5fd6.png)
+
+</div>
+
+</div>
+
+<div class="cell markdown">
+
 **Objective:** To simplify plotting.
-:::
 
-::: {#98e52a07 .cell .markdown}
-### 4. Accidents by Injury Severity Over Time {#4-accidents-by-injury-severity-over-time}
+</div>
+
+<div class="cell markdown">
+
+### 4. Accidents by Injury Severity Over Time
 
 **Objective:** Analyze the number of accidents by injury severity over
 time using a stacked bar chart.
-:::
 
-::: {#01f085ce .cell .code execution_count="47"}
+</div>
+
+<div class="cell code" execution_count="47">
+
 ``` python
 # Group the data by 'Year' and 'Injury.Severity', then count the occurrences
 # This will give us a DataFrame with counts of each severity type for each year
@@ -2572,19 +1639,25 @@ plt.legend(title='Injury Severity')
 plt.show()
 ```
 
-::: {.output .display_data}
-![](vertopal_5ceed5ccf1f543d8af87389819b9ee48/3b2562777456791474b756ca64429be61610e8a4.png)
-:::
-:::
+<div class="output display_data">
 
-::: {#70f0205f .cell .markdown}
-### 5. Heatmap of Accidents by Country and Year {#5-heatmap-of-accidents-by-country-and-year}
+![](3b2562777456791474b756ca64429be61610e8a4.png)
+
+</div>
+
+</div>
+
+<div class="cell markdown">
+
+### 5. Heatmap of Accidents by Country and Year
 
 **Objective:** Visualize the number of accidents by country and year
 using a heatmap.
-:::
 
-::: {#9e26aeb9 .cell .code execution_count="48"}
+</div>
+
+<div class="cell code" execution_count="48">
+
 ``` python
 df_country_year = df.groupby(['Country', 'Year']).size().unstack(fill_value=0)
 
@@ -2609,19 +1682,25 @@ plt.ylabel('Country')
 plt.show()
 ```
 
-::: {.output .display_data}
-![](vertopal_5ceed5ccf1f543d8af87389819b9ee48/d8dfe720b6ac5977658ee04812a5f40c005e9b61.png)
-:::
-:::
+<div class="output display_data">
 
-::: {#1091f796 .cell .markdown}
-### 6. Fatal vs Non-Fatal Accidents by Aircraft Category {#6-fatal-vs-non-fatal-accidents-by-aircraft-category}
+![](d8dfe720b6ac5977658ee04812a5f40c005e9b61.png)
+
+</div>
+
+</div>
+
+<div class="cell markdown">
+
+### 6. Fatal vs Non-Fatal Accidents by Aircraft Category
 
 **Objective:** Compare the number of fatal and non-fatal accidents by
 aircraft category.
-:::
 
-::: {#3e49b9a2 .cell .code execution_count="49"}
+</div>
+
+<div class="cell code" execution_count="49">
+
 ``` python
 # Group the data by 'Aircraft.Category' and 'Injury.Severity', getting count
 df_fatal_nonfatal = df.groupby(['Aircraft.Category', 'Injury.Severity']).size().unstack()
@@ -2651,18 +1730,24 @@ plt.xticks(rotation=45)
 plt.show()
 ```
 
-::: {.output .display_data}
-![](vertopal_5ceed5ccf1f543d8af87389819b9ee48/77ce0d38af2f047a9f7512f073656cf36a7f6333.png)
-:::
-:::
+<div class="output display_data">
 
-::: {#e6f03ed4 .cell .markdown}
-### 7. Number of Accidents by Number of Engines {#7-number-of-accidents-by-number-of-engines}
+![](77ce0d38af2f047a9f7512f073656cf36a7f6333.png)
+
+</div>
+
+</div>
+
+<div class="cell markdown">
+
+### 7. Number of Accidents by Number of Engines
 
 **Objective:** Analyze the number of accidents by the number of engines.
-:::
 
-::: {#17d0406f .cell .code execution_count="50"}
+</div>
+
+<div class="cell code" execution_count="50">
+
 ``` python
 # Count  each unique value in the 'Number.of.Engines' column
 df_engines = df['Number.of.Engines'].value_counts()
@@ -2691,19 +1776,25 @@ plt.xticks(rotation=0)
 plt.show()
 ```
 
-::: {.output .display_data}
-![](vertopal_5ceed5ccf1f543d8af87389819b9ee48/c6025f802b99d45ab164aaf3912d9bba3cbc89ac.png)
-:::
-:::
+<div class="output display_data">
 
-::: {#e4fa0b80 .cell .markdown}
-### 8. Monthly Distribution of Accidents {#8-monthly-distribution-of-accidents}
+![](c6025f802b99d45ab164aaf3912d9bba3cbc89ac.png)
+
+</div>
+
+</div>
+
+<div class="cell markdown">
+
+### 8. Monthly Distribution of Accidents
 
 **Objective:** Analyze the monthly distribution of accidents using a
 line chart.
-:::
 
-::: {#1578e975 .cell .code execution_count="51"}
+</div>
+
+<div class="cell code" execution_count="51">
+
 ``` python
 # Group the data by 'Month' and count the number accidents for each month
 df_monthly = df.groupby('Month').size()
@@ -2730,19 +1821,25 @@ plt.grid(True)
 plt.show()
 ```
 
-::: {.output .display_data}
-![](vertopal_5ceed5ccf1f543d8af87389819b9ee48/d49f0d40c6b59da755aabddff8a25fd6ccd915a7.png)
-:::
-:::
+<div class="output display_data">
 
-::: {#4c8301d6 .cell .markdown}
-### 9. Aircraft Make over Total Fatalities {#9-aircraft-make-over-total-fatalities}
+![](d49f0d40c6b59da755aabddff8a25fd6ccd915a7.png)
+
+</div>
+
+</div>
+
+<div class="cell markdown">
+
+### 9. Aircraft Make over Total Fatalities
 
 **Objective:** displaying the top 10 aircraft makes by total fatalities.
-Here\'s a step-by-step breakdown :
-:::
+Here's a step-by-step breakdown :
 
-::: {#1e09cda0-915e-4c75-9369-ceab687c60c6 .cell .code execution_count="52"}
+</div>
+
+<div class="cell code" execution_count="52">
+
 ``` python
 import matplotlib.pyplot as plt
 
@@ -2762,21 +1859,27 @@ plt.xticks(rotation=45)
 plt.show()
 ```
 
-::: {.output .display_data}
-![](vertopal_5ceed5ccf1f543d8af87389819b9ee48/d56472748a664e91239ca7ced56c102f6e1e54a6.png)
-:::
-:::
+<div class="output display_data">
 
-::: {#4007ffe6 .cell .markdown}
-### 10. Analysis of Aircraft Damage Severity by Make {#10-analysis-of-aircraft-damage-severity-by-make}
+![](d56472748a664e91239ca7ced56c102f6e1e54a6.png)
+
+</div>
+
+</div>
+
+<div class="cell markdown">
+
+### 10. Analysis of Aircraft Damage Severity by Make
 
 This analysis aims to map the aircraft damage severity and identify the
 top 10 aircraft makes with the highest damage severity index. We then
 use a predefined mapping for damage severity, calculate the damage
 severity index for each make, and visualize the top 10 makes.
-:::
 
-::: {#d36900ba .cell .code execution_count="53"}
+</div>
+
+<div class="cell code" execution_count="53">
+
 ``` python
 # Define a mapping for damage severity
 damage_severity_mapping = {
@@ -2805,23 +1908,30 @@ plt.xticks(rotation=45)
 plt.show()
 ```
 
-::: {.output .display_data}
-![](vertopal_5ceed5ccf1f543d8af87389819b9ee48/ab93b6aa009eee74efb1157b4b5689267b4d0a56.png)
-:::
-:::
+<div class="output display_data">
 
-::: {#5dd0e7be .cell .code execution_count="54"}
+![](ab93b6aa009eee74efb1157b4b5689267b4d0a56.png)
+
+</div>
+
+</div>
+
+<div class="cell code" execution_count="54">
+
 ``` python
 df.to_excel('Analysed_data.xlsx', index=False)
 ```
-:::
 
-::: {#00fce6f3 .cell .code execution_count="55"}
+</div>
+
+<div class="cell code" execution_count="55">
+
 ``` python
 df.columns
 ```
 
-::: {.output .execute_result execution_count="55"}
+<div class="output execute_result" execution_count="55">
+
     Index(['Event.Date', 'Location', 'Country', 'Injury.Severity',
            'Aircraft.damage', 'Aircraft.Category', 'Make', 'Model',
            'Total.Fatal.Injuries', 'Total.Serious.Injuries',
@@ -2830,15 +1940,19 @@ df.columns
            'Month', 'Day', 'Total.Injuries', 'Injury.Severity.Index',
            'Damage.Severity.Index'],
           dtype='object')
-:::
-:::
 
-::: {#022a50cf .cell .code}
+</div>
+
+</div>
+
+<div class="cell code">
+
 ``` python
 df['Make'].unique
 ```
 
-::: {.output .execute_result execution_count="136"}
+<div class="output execute_result" execution_count="136">
+
     <bound method Series.unique of 0                             Piper
     1                            Cessna
     2                            Boeing
@@ -2851,10 +1965,14 @@ df['Make'].unique
     78273    American Champion Aircraft
     78275                         Piper
     Name: Make, Length: 76980, dtype: object>
-:::
-:::
 
-::: {#1bce10e7 .cell .code}
+</div>
+
+</div>
+
+<div class="cell code">
+
 ``` python
 ```
-:::
+
+</div>
